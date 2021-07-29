@@ -1,11 +1,10 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:fantastic/bloc/get_movies_byGenre.bloc.dart';
+import 'package:fantastic/bloc/get_movies_byGenre_bloc.dart';
+import 'package:fantastic/model/movie.dart';
+import 'package:fantastic/model/movie_response.dart';
+import 'package:fantastic/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-// import 'package:fantastic/bloc/get_movies_byGenre_bloc.dart';
-import 'package:fantastic/model/movie.dart';
-import 'package:fantastic/model/movie_feedback.dart';
-// import 'package:fantastic/screens/detail_screen.dart';
 import 'package:fantastic/style/theme.dart' as Style;
 
 class GenreMovies extends StatefulWidget {
@@ -26,14 +25,14 @@ class _GenreMoviesState extends State<GenreMovies> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MovieFeedback>(
+    return StreamBuilder<MovieResponse>(
       stream: moviesByGenreBloc.subject.stream,
-      builder: (context, AsyncSnapshot<MovieFeedback> snapshot) {
+      builder: (context, AsyncSnapshot<MovieResponse> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.error != null && snapshot.data.error.length > 0) {
             return _buildErrorWidget(snapshot.data.error);
           }
-          return _buildMoviesByGenreWidget(snapshot.data);
+          return _buildHomeWidget(snapshot.data);
         } else if (snapshot.hasError) {
           return _buildErrorWidget(snapshot.error);
         } else {
@@ -70,7 +69,7 @@ class _GenreMoviesState extends State<GenreMovies> {
     ));
   }
 
-  Widget _buildMoviesByGenreWidget(MovieFeedback data) {
+  Widget _buildHomeWidget(MovieResponse data) {
     List<Movie> movies = data.movies;
     if (movies.length == 0) {
       return Container(
@@ -101,15 +100,15 @@ class _GenreMoviesState extends State<GenreMovies> {
             return Padding(
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 15.0),
               child: GestureDetector(
-                // onTap: () {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) =>
-                //           MovieDetailScreen(movie: movies[index]),
-                //     ),
-                //   );
-                // },
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MovieDetailScreen(movie: movies[index]),
+                    ),
+                  );
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

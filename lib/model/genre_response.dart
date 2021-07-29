@@ -1,17 +1,17 @@
 import 'package:fantastic/model/genre.dart';
 
-class GenreFeedback {
+class GenreResponse {
   final List<Genre> genres;
   final String error;
 
-  GenreFeedback(this.genres, this.error);
+  GenreResponse(this.genres, this.error);
 
-  GenreFeedback.fromJson(Map<String, dynamic> json)
+  GenreResponse.fromJson(Map<String, dynamic> json)
       : genres =
             (json["genres"] as List).map((i) => new Genre.fromJson(i)).toList(),
         error = "";
 
-  GenreFeedback.withError(String errorValue)
-      : genres = List(),
+  GenreResponse.withError(String errorValue)
+      : genres = [],
         error = errorValue;
 }

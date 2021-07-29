@@ -1,22 +1,22 @@
-import 'package:fantastic/model/movie_feedback.dart';
-import 'package:fantastic/store/store.dart';
+import 'package:fantastic/model/movie_response.dart';
+import 'package:fantastic/repository/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NowPlayingListBloc {
-  final MovieStore _store = MovieStore();
-  final BehaviorSubject<MovieFeedback> _subject =
-      BehaviorSubject<MovieFeedback>();
+  final MovieRepository _repository = MovieRepository();
+  final BehaviorSubject<MovieResponse> _subject =
+      BehaviorSubject<MovieResponse>();
 
   getMovies() async {
-    MovieFeedback feedback = await _store.getPlayingMovies();
-    _subject.sink.add(feedback);
+    MovieResponse response = await _repository.getPlayingMovies();
+    _subject.sink.add(response);
   }
 
   dispose() {
     _subject.close();
   }
 
-  BehaviorSubject<MovieFeedback> get subject => _subject;
+  BehaviorSubject<MovieResponse> get subject => _subject;
 }
 
 final nowPlayingMoviesBloc = NowPlayingListBloc();

@@ -1,23 +1,22 @@
-import 'package:fantastic/model/genre_feedback.dart';
-import 'package:fantastic/model/movie_feedback.dart';
-import 'package:fantastic/store/store.dart';
+import 'package:fantastic/model/genre_response.dart';
+import 'package:fantastic/repository/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GenresListBloc {
-  final MovieStore _store = MovieStore();
-  final BehaviorSubject<GenreFeedback> _subject =
-      BehaviorSubject<GenreFeedback>();
+  final MovieRepository _repository = MovieRepository();
+  final BehaviorSubject<GenreResponse> _subject =
+      BehaviorSubject<GenreResponse>();
 
   getGenres() async {
-    GenreFeedback feedback = await _store.getGenres();
-    _subject.sink.add(feedback);
+    GenreResponse response = await _repository.getGenres();
+    _subject.sink.add(response);
   }
 
   dispose() {
     _subject.close();
   }
 
-  BehaviorSubject<GenreFeedback> get subject => _subject;
+  BehaviorSubject<GenreResponse> get subject => _subject;
 }
 
 final genresBloc = GenresListBloc();

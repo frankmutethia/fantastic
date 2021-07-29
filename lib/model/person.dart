@@ -1,18 +1,17 @@
-class Individual {
+class Person {
   final int id;
   final double popularity;
   final String name;
   final String profileImg;
   final String known;
 
-  Individual(
-    this.id,
-    this.popularity,
-    this.name,
-    this.profileImg,
-    this.known,
-  );
-  Individual.fromJson(Map<String, dynamic> json)
+  Person(this.id,
+         this.popularity,
+         this.name,
+         this.profileImg,
+         this.known);
+
+  Person.fromJson(Map<String, dynamic> json)
       : id = json["id"],
         popularity = json["popularity"],
         name = json["name"],

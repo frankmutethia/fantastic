@@ -1,12 +1,11 @@
 import 'package:fantastic/bloc/get_genres_bloc.dart';
 import 'package:fantastic/model/genre.dart';
-import 'package:fantastic/model/genre_feedback.dart';
-import 'package:fantastic/widgets/genres_list.dart';
+import 'package:fantastic/model/genre_response.dart';
 import 'package:flutter/material.dart';
 
-class GenresScreen extends StatefulWidget {
-  // const GenresScreen({ Key? key }) : super(key: key);
+import 'genres_list.dart';
 
+class GenresScreen extends StatefulWidget {
   @override
   _GenresScreenState createState() => _GenresScreenState();
 }
@@ -15,19 +14,19 @@ class _GenresScreenState extends State<GenresScreen> {
   @override
   void initState() {
     super.initState();
-    genresBloc.getGenres();
+    genresBloc..getGenres();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<GenreFeedback>(
+    return StreamBuilder<GenreResponse>(
       stream: genresBloc.subject.stream,
-      builder: (context, AsyncSnapshot<GenreFeedback> snapshot) {
+      builder: (context, AsyncSnapshot<GenreResponse> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.error != null && snapshot.data.error.length > 0) {
             return _buildErrorWidget(snapshot.data.error);
           }
-          return _buildGenresWidget(snapshot.data);
+          return _buildHomeWidget(snapshot.data);
         } else if (snapshot.hasError) {
           return _buildErrorWidget(snapshot.error);
         } else {
@@ -64,13 +63,30 @@ class _GenresScreenState extends State<GenresScreen> {
     ));
   }
 
-  Widget _buildGenresWidget(GenreFeedback data) {
-    List<Genre> genre = data.genres;
-    if (genre.length == 0) {
+  Widget _buildHomeWidget(GenreResponse data) {
+    List<Genre> genres = data.genres;
+    print(genres);
+    if (genres.length == 0) {
       return Container(
-        child: Text("No Genre"),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Text(
+                  "No More Movies",
+                  style: TextStyle(color: Colors.black45),
+                )
+              ],
+            )
+          ],
+        ),
       );
     } else
-      return GenresList(genres: genre);
+      return GenresList(
+        genres: genres,
+      );
   }
 }
